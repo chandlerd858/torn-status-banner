@@ -1,0 +1,16 @@
+{
+  "name": "torn-status-banner",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Auto-updating SVG banner showing personal Torn cooldown/refill status for a forum signature or thread.",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "dotenv": "^16.4.5"
+  }
+}
