@@ -82,10 +82,9 @@ app.get("/banner.svg", async (req, res) => {
     const svg = `
 <svg xmlns="http://www.w3.org/2000/svg" width="300" height="200">
   <rect width="300" height="200" rx="12" fill="#1e1e28"/>
-  <text x="50" y="25" font-family="Verdana, sans-serif" font-size="22" fill="#ffffff">
+  <text x="50" y="30" font-family="Verdana, sans-serif" font-size="22" fill="#ffffff">
     Energy: ${energy.current}/${energy.maximum}
   </text>
-  ${pill(50, 0, energy ? `"Energy: ${energy.current}/${energy.maximum}"`}
   ${pill(50, 50, drugReady ? "Drug CD: READY" : `Drug CD: ${formatSeconds(drugSecs)}`, drugReady)}
   ${pill(50, 100, boosterReady ? "Booster CD: EMPTY" : `Booster CD: ${formatSeconds(boosterSecs)}`, boosterReady)}
   ${pill(50, 150, refillAvailable ? `Refill: AVAILABLE (${REFILL_COST}pts)` : "Refill: USED TODAY", refillAvailable)}
