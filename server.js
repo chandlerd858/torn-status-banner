@@ -86,13 +86,13 @@ app.get("/banner.svg", async (req, res) => {
     const svg = `
 <svg xmlns="http://www.w3.org/2000/svg" width="${SVG_WIDTH}" height="${SVG_HEIGHT}">
   <rect width="${SVG_WIDTH}" height="${SVG_HEIGHT}" rx="12" fill="#1e1e28"/>
-  <text x="${SVG_WIDTH / 2}" y="30" font-family="Verdana, sans-serif" font-size="22" fill="#ffffff" text-anchor="middle">
+  <text x="${SVG_WIDTH / 2}" y="${SVG_HEIGHT * 0.2}" font-family="Verdana, sans-serif" font-size="22" fill="#ffffff" text-anchor="middle">
     Energy: ${energy.current}/${energy.maximum}
   </text>
-  ${pill(PILL_X, 50, drugReady ? "Drug CD: READY" : `Drug CD: ${formatSeconds(drugSecs)}`, drugReady)}
-  ${pill(PILL_X, 100, boosterReady ? "Booster CD: EMPTY" : `Booster CD: ${formatSeconds(boosterSecs)}`, boosterReady)}
-  ${pill(PILL_X, 150, refillAvailable ? `Refill: AVAILABLE (${REFILL_COST}pts)` : "Refill: USED TODAY", refillAvailable)}
-  <text x="${SVG_WIDTH / 2}" y="195" font-family="Verdana, sans-serif" font-size="10" fill="#888888" text-anchor="middle">
+  ${pill(PILL_X, `${SVG_HEIGHT * 0.4}`, drugReady ? "Drug CD: READY" : `Drug CD: ${formatSeconds(drugSecs)}`, drugReady)}
+  ${pill(PILL_X, `${SVG_HEIGHT * 0.6}`, boosterReady ? "Booster CD: EMPTY" : `Booster CD: ${formatSeconds(boosterSecs)}`, boosterReady)}
+  ${pill(PILL_X, `${SVG_HEIGHT * 0.8}`, refillAvailable ? `Refill: AVAILABLE (${REFILL_COST}pts)` : "Refill: USED TODAY", refillAvailable)}
+  <text x="${SVG_WIDTH / 2}" y="${SVG_HEIGHT * 0.9}" font-family="Verdana, sans-serif" font-size="10" fill="#888888" text-anchor="middle">
     Updated ${new Date(cache.fetchedAt).toUTCString()}
   </text>
 </svg>`.trim();
