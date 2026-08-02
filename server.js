@@ -13,6 +13,10 @@ const REFILL_COST = Number(process.env.ENERGY_REFILL_COST || 25);
 // banner could get hit far more often than that if the thread is popular, so we
 // cache aggressively and always serve the cached copy while it's fresh.
 const CACHE_MS = 60_000;
+const SVG_WIDTH = 300;
+const SVG_HEIGHT = 200;
+const PILL_WIDTH = 200;
+const PILL_X = Math.floor((SVG_WIDTH - PILL_WIDTH) / 2);
 
 let cache = { data: null, fetchedAt: 0, error: null };
 
@@ -80,15 +84,15 @@ app.get("/banner.svg", async (req, res) => {
     const energy = data.energy;
 
     const svg = `
-<svg xmlns="http://www.w3.org/2000/svg" width="300" height="200">
-  <rect width="300" height="200" rx="12" fill="#1e1e28"/>
-  <text x="text-align:center" y="30" font-family="Verdana, sans-serif" font-size="22" fill="#ffffff">
+<svg xmlns="http://www.w3.org/2000/svg" width="${SVG_WIDTH}" height="${SVG_HEIGHT}">
+  <rect width="${SVG_WIDTH}" height="${SVG_HEIGHT}" rx="12" fill="#1e1e28"/>
+  <text x="${SVG_WIDTH / 2}" y="30" font-family="Verdana, sans-serif" font-size="22" fill="#ffffff" text-anchor="middle">
     Energy: ${energy.current}/${energy.maximum}
   </text>
-  ${pill(0 auto, 50, drugReady ? "Drug CD: READY" : `Drug CD: ${formatSeconds(drugSecs)}`, drugReady)}
-  ${pill(0 auto, 100, boosterReady ? "Booster CD: EMPTY" : `Booster CD: ${formatSeconds(boosterSecs)}`, boosterReady)}
-  ${pill(0 auto, 150, refillAvailable ? `Refill: AVAILABLE (${REFILL_COST}pts)` : "Refill: USED TODAY", refillAvailable)}
-  <text x="50" y="195" font-family="Verdana, sans-serif" font-size="10" fill="#888888">
+  ${pill(PILL_X, 50, drugReady ? "Drug CD: READY" : `Drug CD: ${formatSeconds(drugSecs)}`, drugReady)}
+  ${pill(PILL_X, 100, boosterReady ? "Booster CD: EMPTY" : `Booster CD: ${formatSeconds(boosterSecs)}`, boosterReady)}
+  ${pill(PILL_X, 150, refillAvailable ? `Refill: AVAILABLE (${REFILL_COST}pts)` : "Refill: USED TODAY", refillAvailable)}
+  <text x="${SVG_WIDTH / 2}" y="195" font-family="Verdana, sans-serif" font-size="10" fill="#888888">
     Updated ${new Date(cache.fetchedAt).toUTCString()}
   </text>
 </svg>`.trim();
