@@ -30,7 +30,7 @@ async function getTornData() {
     throw new Error(`Torn API error ${json.error.code}: ${json.error.error}`);
   }
 
-  const missing = ["bars", "cooldowns", "refills"].filter((k) => !json[k]);
+  const missing = ["energy", "cooldowns", "refills"].filter((k) => !json[k]);
   if (missing.length) {
     throw new Error(
       `Key response is missing selection(s): ${missing.join(", ")}. ` +
@@ -77,7 +77,7 @@ app.get("/banner.svg", async (req, res) => {
     const drugReady = drugSecs === 0;
     const boosterReady = boosterSecs === 0;
     const refillAvailable = data.refills.energy_refill_used === 0;
-    const energy = data.bars.energy;
+    const energy = data.energy;
 
     const svg = `
 <svg xmlns="http://www.w3.org/2000/svg" width="700" height="120">
