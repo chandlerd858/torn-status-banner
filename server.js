@@ -7,6 +7,41 @@ const API_KEY = process.env.TORN_API_KEY;
 
 const REFILL_COST = Number(process.env.ENERGY_REFILL_COST || 30);
 
+const OPEN_IMAGE_PATH = process.env.OPEN_IMAGE_PATH || "./public/open.png";
+const CLOSED_IMAGE_PATH = process.env.CLOSED_IMAGE_PATH || "./public/closed.png";
+const BADGE_WIDTH = Number(process.env.BADGE_WIDTH || 100);
+const BADGE_HEIGHT = Number(process.env.BADGE_HEIGHT || 40);
+ 
+const MIME_TYPES = {
+  ".png": "image/png",
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".gif": "image/gif",
+  ".webp": "image/webp",
+  ".svg": "image/svg+xml",
+};
+
+// Images are small and rarely change, so read + base64-encode once at startup
+// and keep them in memory rather than hitting the filesystem on every request.
+function loadImageAsDataUri(filePath) {
+  try {
+    const ext = path.extname(filePath).toLowerCase();
+    const mime = MIME_TYPES[ext];
+    if (!mime) {
+      console.warn(`Unsupported image type for ${filePath}, skipping`);
+      return null;
+    }
+    const buffer = fs.readFileSync(filePath);
+    return `data:${mime};base64,${buffer.toString("base64")}`;
+  } catch (err) {
+    console.warn(`Could not load image at ${filePath}: ${err.message}`);
+    return null;
+  }
+}
+ 
+const openImageDataUri = loadImageAsDataUri(OPEN_IMAGE_PATH);
+const closedImageDataUri = loadImageAsDataUri(CLOSED_IMAGE_PATH);
+ 
 // Minimum time between real API calls. Torn allows 100 req/min per key, but a forum
 // banner could get hit far more often than that if the thread is popular, so we
 // cache aggressively and always serve the cached copy while it's fresh.
@@ -80,6 +115,17 @@ app.get("/banner.svg", async (req, res) => {
     const boosterReady = boosterSecs === 0;
     const refillAvailable = data.refills.energy_refill_used === 0;
     const energy = data.energy;
+    const onlineStatus = data.last_action.status; // "Online" | "Idle" | "Offline"
+    const isOpen = onlineStatus === "Online";
+    const openColor = isOpen ? "#2ecc71" : "#c0392b";
+    const openLabel = isOpen ? "OPEN" : "CLOSED";
+ 
+    const badgeImage = isOpen ? openImageDataUri : closedImageDataUri;
+    const badgeSvg = badgeImage
+      ? `<image x="580" y="10" width="${BADGE_WIDTH}" height="${BADGE_HEIGHT}" href="${badgeImage}"/>`
+      : `<rect x="580" y="10" width="${BADGE_WIDTH}" height="${BADGE_HEIGHT}" rx="8" fill="${openColor}"/>
+         <text x="${580 + BADGE_WIDTH / 2}" y="${10 + BADGE_HEIGHT / 2 + 5}" font-family="Verdana, sans-serif"
+           font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">${openLabel}</text>`;
 
     const svg = `
 <svg xmlns="http://www.w3.org/2000/svg" width="${SVG_WIDTH}" height="${SVG_HEIGHT}">
@@ -87,6 +133,7 @@ app.get("/banner.svg", async (req, res) => {
   <text x="${SVG_WIDTH / 2}" y="32" font-family="Verdana, sans-serif" font-size="22" fill="#ffffff" text-anchor="middle">
     Energy: ${energy.current}/${energy.maximum}
   </text>
+  ${badgeSvg}
   ${pill(PILL_X, 50, drugReady ? "Drug CD: READY" : `Drug CD: ${formatSeconds(drugSecs)}`, drugReady)}
   ${pill(PILL_X, 100, boosterReady ? "Booster CD: EMPTY" : `Booster CD: ${formatSeconds(boosterSecs)}`, boosterReady)}
   ${pill(PILL_X, 150, refillAvailable ? `Refill: AVAILABLE (${REFILL_COST}pts)` : "Refill: USED TODAY", refillAvailable)}
