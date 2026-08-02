@@ -85,9 +85,9 @@ app.get("/banner.svg", async (req, res) => {
   <text x="text-align:center" y="30" font-family="Verdana, sans-serif" font-size="22" fill="#ffffff">
     Energy: ${energy.current}/${energy.maximum}
   </text>
-  ${pill(margin: 0 auto;, 50, drugReady ? "Drug CD: READY" : `Drug CD: ${formatSeconds(drugSecs)}`, drugReady)}
-  ${pill(margin: 0 auto, 100, boosterReady ? "Booster CD: EMPTY" : `Booster CD: ${formatSeconds(boosterSecs)}`, boosterReady)}
-  ${pill(margin: 0 auto, 150, refillAvailable ? `Refill: AVAILABLE (${REFILL_COST}pts)` : "Refill: USED TODAY", refillAvailable)}
+  ${pill(0 auto, 50, drugReady ? "Drug CD: READY" : `Drug CD: ${formatSeconds(drugSecs)}`, drugReady)}
+  ${pill(0 auto, 100, boosterReady ? "Booster CD: EMPTY" : `Booster CD: ${formatSeconds(boosterSecs)}`, boosterReady)}
+  ${pill(0 auto, 150, refillAvailable ? `Refill: AVAILABLE (${REFILL_COST}pts)` : "Refill: USED TODAY", refillAvailable)}
   <text x="50" y="195" font-family="Verdana, sans-serif" font-size="10" fill="#888888">
     Updated ${new Date(cache.fetchedAt).toUTCString()}
   </text>
