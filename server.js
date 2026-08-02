@@ -53,8 +53,8 @@ function formatSeconds(s) {
 function pill(x, y, label, ready) {
   const color = ready ? "#2ecc71" : "#57606f";
   return `
-    <rect x="${x}" y="${y}" width="215" height="34" rx="8" fill="${color}"/>
-    <text x="${x + 107}" y="${y + 22}" font-family="Verdana, sans-serif" font-size="14"
+    <rect x="${x}" y="${y}" width="200" height="30" rx="8" fill="${color}"/>
+    <text x="${x + 100}" y="${y + 20}" font-family="Verdana, sans-serif" font-size="14"
       fill="#ffffff" text-anchor="middle">${label}</text>`;
 }
 
@@ -82,12 +82,12 @@ app.get("/banner.svg", async (req, res) => {
     const svg = `
 <svg xmlns="http://www.w3.org/2000/svg" width="300" height="225">
   <rect width="300" height="225" rx="12" fill="#1e1e28"/>
-  <text x="30" y="25" font-family="Verdana, sans-serif" font-size="24" fill="#ffffff">
+  <text x="50" y="25" font-family="Verdana, sans-serif" font-size="24" fill="#ffffff">
     Energy: ${energy.current}/${energy.maximum}
   </text>
-  ${pill(30, 50, drugReady ? "Drug CD: READY" : `Drug CD: ${formatSeconds(drugSecs)}`, drugReady)}
-  ${pill(30, 100, boosterReady ? "Booster CD: EMPTY" : `Booster CD: ${formatSeconds(boosterSecs)}`, boosterReady)}
-  ${pill(30, 150, refillAvailable ? `Refill: AVAILABLE (${REFILL_COST}pts)` : "Refill: USED TODAY", refillAvailable)}
+  ${pill(50, 50, drugReady ? "Drug CD: READY" : `Drug CD: ${formatSeconds(drugSecs)}`, drugReady)}
+  ${pill(50, 100, boosterReady ? "Booster CD: EMPTY" : `Booster CD: ${formatSeconds(boosterSecs)}`, boosterReady)}
+  ${pill(50, 150, refillAvailable ? `Refill: AVAILABLE (${REFILL_COST}pts)` : "Refill: USED TODAY", refillAvailable)}
   <text x="30" y="200" font-family="Verdana, sans-serif" font-size="11" fill="#888888">
     Updated ${new Date(cache.fetchedAt).toUTCString()}
   </text>
