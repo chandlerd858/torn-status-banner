@@ -5,8 +5,6 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const API_KEY = process.env.TORN_API_KEY;
 
-const ONLINE_IMAGE_DATA = process.env.ONLINE_IMAGE_DATA || "";
-const OFFLINE_IMAGE_DATA = process.env.OFFLINE_IMAGE_DATA || "";
 const REFILL_COST = Number(process.env.ENERGY_REFILL_COST || 30);
 
 // Minimum time between real API calls. Torn allows 100 req/min per key, but a forum
