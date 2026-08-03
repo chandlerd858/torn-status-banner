@@ -55,14 +55,14 @@ const PILL_WIDTH = 200;
 const PILL_X = Math.floor((SVG_WIDTH - PILL_WIDTH) / 2);
 const BADGE_X = Math.floor((SVG_WIDTH - BADGE_WIDTH) / 2);
 
-// Row y-positions, top to bottom: energy text, badge, drug pill, booster pill, refill pill
+// Row y-positions, top to bottom: energy text, drug pill, booster pill, refill pill, badge
 const ENERGY_Y = 32;
-const BADGE_Y = 50;
-const PILL1_Y = 100;
-const PILL2_Y = 150;
-const PILL3_Y = 200;
-const FOOTER_MARGIN = 30; // space below the last pill for the "updated" text
-const SVG_HEIGHT = PILL3_Y + 30 + FOOTER_MARGIN; // grows automatically if rows move
+const PILL1_Y = 50;
+const PILL2_Y = 100;
+const PILL3_Y = 150;
+const BADGE_Y = 200;
+const FOOTER_MARGIN = 30; // space below the badge for the "updated" text
+const SVG_HEIGHT = BADGE_Y + BADGE_HEIGHT + FOOTER_MARGIN; // grows automatically if rows move
 
 let cache = { data: null, fetchedAt: 0, error: null };
 
@@ -147,10 +147,10 @@ app.get("/banner.svg", async (req, res) => {
   <text x="${SVG_WIDTH / 2}" y="${ENERGY_Y}" font-family="Verdana, sans-serif" font-size="22" fill="#ffffff" text-anchor="middle">
     Energy: ${energy.current}/${energy.maximum}
   </text>
-  ${badgeSvg}
   ${pill(PILL_X, PILL1_Y, drugReady ? "Drug CD: READY" : `Drug CD: ${formatSeconds(drugSecs)}`, drugReady)}
   ${pill(PILL_X, PILL2_Y, boosterReady ? "Booster CD: EMPTY" : `Booster CD: ${formatSeconds(boosterSecs)}`, boosterReady)}
   ${pill(PILL_X, PILL3_Y, refillAvailable ? `Refill: AVAILABLE (${REFILL_COST}pts)` : "Refill: USED TODAY", refillAvailable)}
+  ${badgeSvg}
   <text x="${SVG_WIDTH / 2}" y="${SVG_HEIGHT - 5}" font-family="Verdana, sans-serif" font-size="10" fill="#888888" text-anchor="middle">
     Updated ${new Date(cache.fetchedAt).toUTCString()}
   </text>
